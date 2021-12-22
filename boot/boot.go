@@ -3,6 +3,7 @@ package boot
 import (
 	"flag"
 	"fmt"
+	"ready-go/app/dao"
 	"ready-go/config"
 	"ready-go/pkg/logger"
 )
@@ -17,6 +18,11 @@ func InitApp() error {
 	cfg := config.GetConfig()
 	// 初始化日志包
 	logger.InitLog(cfg.Log.Style, cfg.Log.Level)
+
+	// 初始化数据库连接
+	if err := dao.InitDAO(); err != nil {
+		return fmt.Errorf("数据库连接出错, %v", err)
+	}
 
 	return nil
 }
