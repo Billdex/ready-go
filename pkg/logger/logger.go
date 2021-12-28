@@ -8,87 +8,95 @@ import (
 	"time"
 )
 
-var logger *zap.SugaredLogger
+var logger = NewLogger("json", "info")
+
+func L() *zap.Logger {
+	return logger
+}
 
 func Debug(args ...interface{}) {
-	logger.Debug(args...)
+	logger.Sugar().Debug(args...)
 }
 
 func Debugw(msg string, keysAndValues ...interface{}) {
-	logger.Debugw(msg, keysAndValues...)
+	logger.Sugar().Debugw(msg, keysAndValues...)
 }
 
 func Debugf(template string, args ...interface{}) {
-	logger.Debugf(template, args...)
+	logger.Sugar().Debugf(template, args...)
 }
 
 func Info(args ...interface{}) {
-	logger.Info(args...)
+	logger.Sugar().Info(args...)
 }
 
 func Infow(msg string, keysAndValues ...interface{}) {
-	logger.Infow(msg, keysAndValues...)
+	logger.Sugar().Infow(msg, keysAndValues...)
 }
 
 func Infof(template string, args ...interface{}) {
-	logger.Infof(template, args...)
+	logger.Sugar().Infof(template, args...)
 }
 
 func Warn(args ...interface{}) {
-	logger.Warn(args...)
+	logger.Sugar().Warn(args...)
 }
 
 func Warnw(msg string, keysAndValues ...interface{}) {
-	logger.Warnw(msg, keysAndValues...)
+	logger.Sugar().Warnw(msg, keysAndValues...)
 }
 
 func Warnf(template string, args ...interface{}) {
-	logger.Warnf(template, args...)
+	logger.Sugar().Warnf(template, args...)
 }
 
 func Error(args ...interface{}) {
-	logger.Error(args...)
+	logger.Sugar().Error(args...)
 }
 
 func Errorw(msg string, keysAndValues ...interface{}) {
-	logger.Errorw(msg, keysAndValues...)
+	logger.Sugar().Errorw(msg, keysAndValues...)
 }
 
 func Errorf(template string, args ...interface{}) {
-	logger.Errorf(template, args...)
+	logger.Sugar().Errorf(template, args...)
 }
 
 func Panic(args ...interface{}) {
-	logger.Panic(args...)
+	logger.Sugar().Panic(args...)
 }
 
 func Panicw(msg string, keysAndValues ...interface{}) {
-	logger.Panicw(msg, keysAndValues...)
+	logger.Sugar().Panicw(msg, keysAndValues...)
 }
 
 func Panicf(template string, args ...interface{}) {
-	logger.Panicf(template, args...)
+	logger.Sugar().Panicf(template, args...)
 }
 
 func Fatal(args ...interface{}) {
-	logger.Fatal(args...)
+	logger.Sugar().Fatal(args...)
 }
 
 func Fatalw(msg string, keysAndValues ...interface{}) {
-	logger.Fatalw(msg, keysAndValues...)
+	logger.Sugar().Fatalw(msg, keysAndValues...)
 }
 
 func Fatalf(template string, args ...interface{}) {
-	logger.Fatalf(template, args...)
+	logger.Sugar().Fatalf(template, args...)
 }
 
 func Sync() {
 	logger.Sync()
 }
 
-func InitLog(style string, level string, hooks ...func(zapcore.Entry) error) {
+func NewLogger(style string, level string, hooks ...func(zapcore.Entry) error) *zap.Logger {
 	core := zapcore.NewCore(newEncoder(style), os.Stdout, getZapLevel(level))
-	logger = zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1), zap.Hooks(hooks...)).Sugar()
+	return zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1), zap.Hooks(hooks...))
+}
+
+func SetLogger(style string, level string, hooks ...func(zapcore.Entry) error) {
+	logger = NewLogger(style, level, hooks...)
 }
 
 // Zap 日志编码器

@@ -17,7 +17,7 @@ func InitApp() error {
 
 	cfg := config.GetConfig()
 	// 初始化日志包
-	logger.InitLog(cfg.Log.Style, cfg.Log.Level)
+	logger.SetLogger(cfg.Log.Style, cfg.Log.Level)
 
 	// 初始化数据库连接
 	if err := dao.InitDAO(); err != nil {
