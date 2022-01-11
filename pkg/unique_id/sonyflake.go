@@ -11,7 +11,11 @@ func SonyFlackSetup(st sonyflake.Settings) {
 	flack = sonyflake.NewSonyflake(st)
 }
 
-func SonyFlakeID() (string, error) {
+func SonyFlakeUintID() (uint64, error) {
+	return flack.NextID()
+}
+
+func SonyFlakeStrID() (string, error) {
 	id, err := flack.NextID()
 	if err != nil {
 		return "", err

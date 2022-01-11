@@ -13,4 +13,5 @@ func main() {
 	if err := boot.InitApp(); err != nil {
 		logger.Fatal(err)
 	}
+
 }
