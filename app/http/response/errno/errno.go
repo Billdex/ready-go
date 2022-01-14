@@ -1,5 +1,7 @@
 package errno
 
+import "fmt"
+
 // 基础状态码
 const (
 	StatusOK          = 0
@@ -39,4 +41,33 @@ func GetMsg(code int) string {
 		return msg
 	}
 	return statusMsg[StatusBadRequest]
+}
+
+type Errno interface {
+	GetCode() int
+	GetMessage() string
+}
+
+type Error struct {
+	code    int
+	message string
+}
+
+func (e Error) Error() string {
+	return fmt.Sprintf("%d: %s", e.code, e.message)
+}
+
+func (e Error) GetCode() int {
+	return e.code
+}
+
+func (e Error) GetMessage() string {
+	return e.message
+}
+
+func New(code int) Errno {
+	return Error{
+		code:    code,
+		message: GetMsg(code),
+	}
 }
